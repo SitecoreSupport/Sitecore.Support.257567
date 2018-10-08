@@ -15,7 +15,13 @@
     public ListPagination(string signature) : base(signature)
     {
     }
+    public ListPagination(IDictionary<string, string> renderingParameters, int itemsCount) : base(renderingParameters, itemsCount)
+    {
+    }
 
+    public ListPagination(NameValueCollection renderingParameters, int itemsCount) : base(renderingParameters, itemsCount)
+    {
+    }
     public override int CurrentPage
     {
       get

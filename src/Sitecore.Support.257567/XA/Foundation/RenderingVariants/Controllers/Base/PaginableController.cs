@@ -16,7 +16,7 @@
 
   public class PaginableController : Sitecore.XA.Foundation.RenderingVariants.Controllers.Base.PaginableController
   {
-    protected override IListPagination PaginationConfiguration => ListPaginationContext.GetCurrent().Get(base.Rendering.Parameters["ListSignature"]) ?? new ListPagination(base.Rendering.Parameters.ToDictionary((KeyValuePair<string, string> p) => p.Key, (KeyValuePair<string, string> p) => p.Value), ListRepository.GetItems().Count());
+    protected override IListPagination PaginationConfiguration => ListPaginationContext.GetCurrent().Get(base.Rendering.Parameters["ListSignature"]) ?? new Sitecore.Support.XA.Foundation.RenderingVariants.Lists.Pagination.ListPagination(base.Rendering.Parameters.ToDictionary((KeyValuePair<string, string> p) => p.Key, (KeyValuePair<string, string> p) => p.Value), ListRepository.GetItems().Count());
 
     protected override void OnActionExecuting(ActionExecutingContext filterContext)
     {
@@ -32,12 +32,12 @@
           IListPagination pagination;
           if (item.Parameters.Contains("SourceType"))
           {
-            pagination = new ListPagination(item.Parameters.ToDictionary((KeyValuePair<string, string> p) => p.Key, (KeyValuePair<string, string> p) => p.Value), ListRepository.GetItems(rendering, item.Parameters["SourceType"], base.IsEdit).Count());
+            pagination = new Sitecore.Support.XA.Foundation.RenderingVariants.Lists.Pagination.ListPagination(item.Parameters.ToDictionary((KeyValuePair<string, string> p) => p.Key, (KeyValuePair<string, string> p) => p.Value), ListRepository.GetItems(rendering, item.Parameters["SourceType"], base.IsEdit).Count());
           }
           else
           {
             int num = ListRepository.GetItems().Count();
-            pagination = ((num > 0) ? new ListPagination(item.Parameters.ToDictionary((KeyValuePair<string, string> p) => p.Key, (KeyValuePair<string, string> p) => p.Value), num) : new ListPagination(item.Parameters.ToDictionary((KeyValuePair<string, string> p) => p.Key, (KeyValuePair<string, string> p) => p.Value), ListRepository.GetDatasourceItemsCount(rendering, base.IsEdit)));
+            pagination = ((num > 0) ? new Sitecore.Support.XA.Foundation.RenderingVariants.Lists.Pagination.ListPagination(item.Parameters.ToDictionary((KeyValuePair<string, string> p) => p.Key, (KeyValuePair<string, string> p) => p.Value), num) : new Sitecore.Support.XA.Foundation.RenderingVariants.Lists.Pagination.ListPagination(item.Parameters.ToDictionary((KeyValuePair<string, string> p) => p.Key, (KeyValuePair<string, string> p) => p.Value), ListRepository.GetDatasourceItemsCount(rendering, base.IsEdit)));
           }
           if (!ListPaginationContext.GetCurrent().Contains(pagination))
           {
