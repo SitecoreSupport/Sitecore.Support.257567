@@ -12,6 +12,7 @@
 
   public class ListPagination : Sitecore.XA.Foundation.RenderingVariants.Lists.Pagination.ListPagination
   {
+    public override int Skip => Offset + PageSize * (CurrentPage - 1);
     public ListPagination(string signature) : base(signature)
     {
     }
@@ -29,23 +30,23 @@
         int @int = MainUtil.GetInt(WebUtil.GetQueryString(ListSignature ?? string.Empty), 0);
         if (@int <= 0)
         {
-          return 0;
+          return 1;
         }
         if (@int >= PagesCount)
         {
-          return PagesCount - 1;
+          return PagesCount;
         }
         return @int;
       }
     }
 
-    public override string FirstPageUrl => CreateUrl(0);
+    public override string FirstPageUrl => CreateUrl(1);
 
-    public override string PreviousPageUrl => CreateUrl((CurrentPage - 1 >= 0) ? (CurrentPage - 1) : 0);
+    public override string PreviousPageUrl => CreateUrl(CurrentPage <= 1 ? 1 : CurrentPage - 1);
 
-    public override string NextPageUrl => CreateUrl((CurrentPage + 1 >= PagesCount) ? (PagesCount - 1) : (CurrentPage + 1));
+    public override string NextPageUrl => CreateUrl(CurrentPage >= PagesCount ? PagesCount : CurrentPage + 1);
 
-    public override string LastPageUrl => CreateUrl(PagesCount - 1);
+    public override string LastPageUrl => CreateUrl(PagesCount);
 
     public new IEnumerable<ListPaginationModel> GetPages(int collapseModeTreshold)
     {
@@ -67,7 +68,7 @@
         num = ComputeStartPage(collapseModeTreshold, num);
         num2 = collapseModeTreshold;
       }
-      List<ListPaginationModel> list = Enumerable.Range(num, num2).Select(CreatePageModel).ToList();
+      List<ListPaginationModel> list = Enumerable.Range(num+1, num2).Select(CreatePageModel).ToList();
       if (num > 0)
       {
         list.Insert(0, CreateDotsModel());
@@ -83,7 +84,7 @@
     {
       return new ListPaginationModel
       {
-        Label = p + 1 + string.Empty,
+        Label = p + string.Empty,
         Url = CreateUrl(p),
         CssClass = ((p == CurrentPage) ? "active" : string.Empty),
         IsLink = (p != CurrentPage),

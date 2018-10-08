@@ -12,18 +12,20 @@
     {
       IListPagination listPagination = ListPaginationContext.GetCurrent().Get(Rendering.Parameters["ListSignature"]);
       int collapseModeTreshold = Rendering.Parameters.ParseInt("CollapseModeThreshold", 0);
-      List<ListPaginationModel> source = listPagination.GetPages(collapseModeTreshold).ToList();
+      List<ListPaginationModel> source = ((Sitecore.Support.XA.Foundation.RenderingVariants.Lists.Pagination.ListPagination)listPagination).GetPages(collapseModeTreshold).ToList();
       List<PaginationLinkModel> list = new List<PaginationLinkModel>();
       if (!source.Any())
       {
         return list;
       }
-      list.Add(CreateLinkModel("FirstLabel", listPagination.FirstPageUrl, listPagination.CurrentPage > 0));
-      list.Add(CreateLinkModel("PreviousLabel", listPagination.PreviousPageUrl, listPagination.CurrentPage > 0));
+      #region Modified code
+      list.Add(CreateLinkModel("FirstLabel", listPagination.FirstPageUrl, listPagination.CurrentPage > 1));
+      list.Add(CreateLinkModel("PreviousLabel", listPagination.PreviousPageUrl, listPagination.CurrentPage > 1));
       list.AddRange(from m in source
                     select new PaginationLinkModel(m));
-      list.Add(CreateLinkModel("NextLabel", listPagination.NextPageUrl, listPagination.CurrentPage < listPagination.PagesCount - 1));
-      list.Add(CreateLinkModel("LastLabel", listPagination.LastPageUrl, listPagination.CurrentPage < listPagination.PagesCount - 1));
+      list.Add(CreateLinkModel("NextLabel", listPagination.NextPageUrl, listPagination.CurrentPage < listPagination.PagesCount));
+      list.Add(CreateLinkModel("LastLabel", listPagination.LastPageUrl, listPagination.CurrentPage < listPagination.PagesCount));
+      #endregion
       return list;
     }
   }
