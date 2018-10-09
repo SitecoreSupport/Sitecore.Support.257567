@@ -80,6 +80,21 @@
       return list;
     }
 
+    protected override string CreateUrl(int page)
+    {
+      NameValueCollection nvc = HttpUtility.ParseQueryString(HttpContext.Current.Request.QueryString.ToString());
+      if (page <= 1)
+      {
+        nvc.Remove(this.ListSignature);
+      }
+      else
+      {
+        nvc.Set(this.ListSignature, page + string.Empty);
+      }
+      string str = (nvc.Count > 0) ? ("?" + nvc.ToQueryString()) : string.Empty;
+      return (HttpContext.Current.Request.Url.AbsolutePath + str);
+    }
+
     protected override ListPaginationModel CreatePageModel(int p)
     {
       return new ListPaginationModel
