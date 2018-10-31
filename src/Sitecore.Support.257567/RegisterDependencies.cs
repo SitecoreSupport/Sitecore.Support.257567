@@ -9,7 +9,7 @@ namespace Sitecore.Support
   {
     public void Configure(IServiceCollection serviceCollection)
     {
-      serviceCollection.AddSingleton<IPaginationRepository, Sitecore.Support.XA.Feature.PageContent.Repositories.PaginationRepository>();
+      serviceCollection.AddTransient<IPaginationRepository, Sitecore.Support.XA.Feature.PageContent.Repositories.PaginationRepository>();
       serviceCollection.AddTransient<Sitecore.Support.XA.Feature.PageContent.Controllers.PaginationController>();
       serviceCollection.AddTransient<Sitecore.Support.XA.Feature.PageContent.Controllers.PageListController>();
     }
