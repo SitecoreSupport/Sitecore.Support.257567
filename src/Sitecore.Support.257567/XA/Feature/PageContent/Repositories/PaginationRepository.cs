@@ -8,7 +8,7 @@
 
   public class PaginationRepository : Sitecore.XA.Feature.PageContent.Repositories.PaginationRepository
   {
-    public override List<PaginationLinkModel> CreatePagesList()
+    public override IList<PaginationLinkModel> CreatePagesList()
     {
       IListPagination listPagination = ListPaginationContext.GetCurrent().Get(Rendering.Parameters["ListSignature"]);
       int collapseModeTreshold = Rendering.Parameters.ParseInt("CollapseModeThreshold", 0);
